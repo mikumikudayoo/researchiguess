@@ -1,0 +1,1 @@
+this is the server code, idk how to implement git into arduino ide so.... yes
