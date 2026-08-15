@@ -1,3 +1,7 @@
+// unrelated to the actual research, just used to test out the oled
+// made by gemini pro extended
+// oh and i also dont know how to remove the .bin file in littlefs so... thats there forever i guess
+
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
