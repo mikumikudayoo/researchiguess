@@ -13,21 +13,21 @@
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
 // --- PIN DEFINITIONS ---
-#define FLOW_SENSOR_PIN 19 // Sensor signal connected to GPIO 19 🌊
-#define SERVO_PIN 5        // SG90 Yellow Signal wire 🔄
-#define CURRENT_PIN 34     // ACS712 OUT pin ⚡
-#define RELAY_PIN 26       // 12V Water Pump Switch 🔌
+#define FLOW_SENSOR_PIN 19 // Sensor signal connected to GPIO 19
+#define SERVO_PIN 5        // SG90 Yellow Signal wire
+#define CURRENT_PIN 34     // ACS712 OUT pin
+#define RELAY_PIN 26       // 12V Water Pump Switch
 
 // --- HARDWARE OBJECTS ---
 Servo bladeServo;
 
 // --- FLOW SENSOR INTERRUPT VARIABLES ---
 volatile unsigned long pulseCount = 0;
-volatile unsigned long lastMicros = 0; // NEW: Debounce timer to block motor EMI noise!
+volatile unsigned long lastMicros = 0;
 float flowRateLmin = 0.0;
 unsigned long lastLoopTime = 0;
 
-// Debounced Interrupt Function to ignore ghost pulses!
+// Debounced Interrupt Function to ignore ghost pulses
 void IRAM_ATTR countPulse() {
   unsigned long currentMicros = micros();
   // Only count if its been at least 2000 microseconds (2ms) since the last pulse
