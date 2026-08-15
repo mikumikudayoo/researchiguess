@@ -3,7 +3,7 @@ import express from 'express';
 const app = express();
 const PORT = 3000;
 
-// --- MIKU'S FUZZY LOGIC ENGINE ---
+// --- FUZZY LOGIC ENGINE ---
 function getFuzzyAngle(flow) {
   // 1. Fuzzification (Membership Functions)
   // we determine... "how much" the flow belongs to each category (0.0 to 1.0)
