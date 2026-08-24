@@ -27,8 +27,10 @@ function getFuzzyAngle(flow) {
   const numerator = (uLow * angleLow) + (uMed * angleMed) + (uHigh * angleHigh);
   const denominator = uLow + uMed + uHigh;
 
+  // obviously, dont accept fractions with 0 as their denominator as that will result in undefined
   if (denominator === 0) return 0;
 
+  // this is our final angle, ((uLow * angleLow) + (uMed * angleMed) + (uHigh * angleHigh))/(uLow + uMed + uHigh)
   let finalAngle = Math.round(numerator / denominator);
   
   // Hard limit to ensure it never exceeds 75 degrees just in case
@@ -39,11 +41,12 @@ function getFuzzyAngle(flow) {
 app.get('/a/:waterAmount', (req, res) => {
   const waterAmount = parseFloat(req.params.waterAmount);
 
+  // if the esp32 SOMEHOW sends something that isnt a number
   if (isNaN(waterAmount)) {
     return res.status(400).send('Invalid water amount');
   }
 
-  // Do not accept lower than 1 L/min
+  // Do not accept lower than 1 L/min (because the water pump likes to interfere with the water flow sensor, but i did get it under 1 L/min of interference so...
   if (waterAmount < 1.0) {
     console.log(`[RECEIVE] Flow Rate: ${waterAmount} L/min (REJECTED: Under 1 L/min)`);
     // Sending back 0 to safely tell the ESP32 to default/shut down the angle
