@@ -4,7 +4,7 @@ const app = express();
 const PORT = 3000;
 
 // --- FUZZY LOGIC ENGINE ---
-function getFuzzyAngle(flow) {
+function getFuzzyAngle(flow: number) {
   // 1. Fuzzification (Membership Functions)
   // we determine... "how much" the flow belongs to each category (0.0 to 1.0)
   
