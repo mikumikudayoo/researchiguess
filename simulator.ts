@@ -255,7 +255,7 @@ function simulateController(
         // to every controller for a fair paired comparison.
         const finalRpm = Math.max(
             0,
-            currentRpm * waterNoiseProfile[step]
+            currentRpm * waterNoiseProfile[step]!
         );
 
         const electrical =
@@ -295,7 +295,7 @@ for (let rep = 1; rep <= 5; rep++) {
     const rng = createRng(20260826 + rep);
 
     for (let trialIdx = 0; trialIdx < flowLevels.length; trialIdx++) {
-        const flow = flowLevels[trialIdx];
+        const flow = flowLevels[trialIdx]!;
         const trialNum = trialIdx + 1;
 
         let csvData =
