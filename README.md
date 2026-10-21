@@ -32,3 +32,13 @@ synthetic result set and complete reproducibility manifest. Load power now obeys
 measurement window excludes the first 30 seconds. See [model assumptions and output
 schema](docs/model.md). These changes do not validate the assumed turbine law,
 the built-in 42° peak, generator constants, or historical manuscript provenance.
+
+## dynamic synthetic comparisons
+
+`bun run simulate:dynamics -- results/new-dynamic-run` compares four controllers
+on constant, step, ramp and bounded profile flow. True flow, noisy sampled flow,
+communication delay and modeled actuator motion are separate. Outputs include
+CSV/JSON, deterministic SVG plots and a reproducibility manifest. See
+[dynamic assumptions and metric definitions](docs/dynamics.md). Timing and response
+metrics describe this discrete model; they do not certify real-time hardware or
+mechanical protection.

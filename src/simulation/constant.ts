@@ -149,6 +149,7 @@ export function summarizeRun(rows:SimulationRow[]):RunSummary {
     rpmIntegral+=dt*(r.rpm+prev.rpm)/2; loadEnergyJ+=dt*(r.pLoadW+prev.pLoadW)/2;
   }
   const duration=w.endS-w.startS;
+  for(const [key,value] of Object.entries({rpmIntegral,loadEnergyJ,meanRpm:rpmIntegral/duration,meanPLoadW:loadEnergyJ/duration})) finiteNumber(value,key);
   return {runId:first.runId,controllerId:first.controllerId,measurementWindow:{...w},sampleCount:selected.length,
     integration:'trapezoidal-on-declared-grid',meanRpm:rpmIntegral/duration,meanPLoadW:loadEnergyJ/duration,
     loadEnergyJ,maxRpm,minRpm,hydraulicEfficiency:null};
