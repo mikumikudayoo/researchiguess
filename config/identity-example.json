@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "taph.controller.v1",
+  "id": "increasing-pitch-v1",
+  "flowKnotsLMin": [
+    1,
+    3.5,
+    6
+  ],
+  "pitchConsequentsDeg": [
+    10,
+    40,
+    75
+  ],
+  "pitchMinDeg": 10,
+  "pitchMaxDeg": 75,
+  "pitchResolutionDeg": 1,
+  "outOfRange": "reject",
+  "mapping": {
+    "id": "identity-example-unverified",
+    "servoZeroDeg": 0,
+    "direction": 1,
+    "pitchPerServoDeg": 1,
+    "servoMinDeg": 0,
+    "servoMaxDeg": 180,
+    "calibrationStatus": "unverified",
+    "calibrationRecordId": null
+  },
+  "deploymentReviewId": null
+}
