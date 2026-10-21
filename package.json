@@ -2,13 +2,21 @@
   "name": "researchiguess",
   "private": true,
   "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
+    "@types/bun": "1.3.14",
+    "@types/express": "5.0.6",
+    "typescript": "5.9.3"
   },
   "dependencies": {
-    "@types/express": "^5.0.6",
-    "express": "^5.2.1"
+    "express": "5.2.1"
+  },
+  "packageManager": "bun@1.4.3",
+  "engines": {
+    "bun": "1.4.3"
+  },
+  "scripts": {
+    "test": "bun test",
+    "typecheck": "bun node_modules/typescript/bin/tsc --noEmit",
+    "build": "bun build server.ts scripts/legacy-run.ts --target=bun --outdir=dist",
+    "legacy:simulate": "bun scripts/legacy-run.ts"
   }
 }

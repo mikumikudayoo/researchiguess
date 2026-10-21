@@ -1,0 +1,159 @@
+{
+  "schemaVersion": "taph.baseline.v1",
+  "auditedCommit": "a37d1d5abf4d13d775ae206b4cd1c4c59f0e88ce",
+  "inspectedDefaultBranch": "main",
+  "inspectedDefaultHead": "a37d1d5abf4d13d775ae206b4cd1c4c59f0e88ce",
+  "comparison": "identical",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "1a1dbe176bc233b499d35a57db7513f2941c99ab9759f177830c9149be99005b",
+      "bytes": 66,
+      "gitBlobSha": "dfe0770424b2a19faf507a501ebfc23be8f54e7b",
+      "gitBlobSha256": "1a1dbe176bc233b499d35a57db7513f2941c99ab9759f177830c9149be99005b"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "8381a31c2a56690ba395653a6cd71b6f378683e0925dc9eea595c853c47757fe",
+      "bytes": 2141,
+      "gitBlobSha": "1170717c1478bdeb91fe179e892ee76371ff88de",
+      "gitBlobSha256": "8381a31c2a56690ba395653a6cd71b6f378683e0925dc9eea595c853c47757fe"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "5069618dd42983e184aa868c1d3bb8f272a97d0904167f8bc549ee88378f15b3",
+      "bytes": 1067,
+      "gitBlobSha": "724aff19bdbd9e6c85dced141939cba11ca7f720",
+      "gitBlobSha256": "5069618dd42983e184aa868c1d3bb8f272a97d0904167f8bc549ee88378f15b3"
+    },
+    {
+      "path": "README.md",
+      "sha256": "e398d9cecc19cc4361be00d87ec443cc3f3f889929f902c12876000b5edc17a4",
+      "bytes": 77,
+      "gitBlobSha": "f37cedbd39bc324f58eaea399161d1ecd27db716",
+      "gitBlobSha256": "e398d9cecc19cc4361be00d87ec443cc3f3f889929f902c12876000b5edc17a4"
+    },
+    {
+      "path": "badapple.ino",
+      "sha256": "36f162dd41edad5c17ad2986f33a7c68ad8e083ebda82fd1e01bbbeecce998ee",
+      "bytes": 3295,
+      "gitBlobSha": "c90b01155550c5321971f6b511576636a654b2fd",
+      "gitBlobSha256": "36f162dd41edad5c17ad2986f33a7c68ad8e083ebda82fd1e01bbbeecce998ee"
+    },
+    {
+      "path": "bun.lock",
+      "sha256": "daf1834597cbb5168c0871dfd62ef746cebbc2f4fdb27f771313f5f9288edc2a",
+      "bytes": 16750,
+      "gitBlobSha": "3929bb4cd269a1f1e26bb6b1329fb2a3d19f8976",
+      "gitBlobSha256": "daf1834597cbb5168c0871dfd62ef746cebbc2f4fdb27f771313f5f9288edc2a"
+    },
+    {
+      "path": "package.json",
+      "sha256": "cb60d518870e68b118b4ca97e14e657983ddcf347748859d42ff776450bff1d1",
+      "bytes": 238,
+      "gitBlobSha": "cd6f8fc1359b3a609a52c324c66194628863266c",
+      "gitBlobSha256": "cb60d518870e68b118b4ca97e14e657983ddcf347748859d42ff776450bff1d1"
+    },
+    {
+      "path": "server.ts",
+      "sha256": "17aa60e18c1f7788e29f2919183516c813fce17e52ce75ccfa4d50f644262962",
+      "bytes": 2613,
+      "gitBlobSha": "464e31a1b39adb9aeb636fdd9a63f6adc9dedc25",
+      "gitBlobSha256": "17aa60e18c1f7788e29f2919183516c813fce17e52ce75ccfa4d50f644262962"
+    },
+    {
+      "path": "simulator.ts",
+      "sha256": "43fbc011babb6dd396bd63d47c3e8f7b3dabbbf2749df6eb9997957ee879f173",
+      "bytes": 11196,
+      "gitBlobSha": "3664e173a55d5d3f76f5fb01ae875b47c0e41dfc",
+      "gitBlobSha256": "43fbc011babb6dd396bd63d47c3e8f7b3dabbbf2749df6eb9997957ee879f173"
+    },
+    {
+      "path": "sketch_aug3a.ino",
+      "sha256": "6ac5ef0c78e4f14539c1cede3395bdd57a4d4dace2f7ee3e2d53293973e39958",
+      "bytes": 4112,
+      "gitBlobSha": "8c2fe7942fdc7f02a7e72b63d78f6b913a099b7b",
+      "gitBlobSha256": "6ac5ef0c78e4f14539c1cede3395bdd57a4d4dace2f7ee3e2d53293973e39958"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "4dc04b191bf94ab851419f7c62b4514bc1d1ec2eadaf8bff5b97c002f6d84b5b",
+      "bytes": 735,
+      "gitBlobSha": "b2e7497d8972a8b4ad88c003e2e55218e5870625",
+      "gitBlobSha256": "4dc04b191bf94ab851419f7c62b4514bc1d1ec2eadaf8bff5b97c002f6d84b5b"
+    }
+  ],
+  "constants": {
+    "voltsPerRpm": 0.015,
+    "loadResistanceOhm": 10,
+    "internalResistanceOhm": 1,
+    "legacyPowerScale": 0.65,
+    "dtS": 0.1,
+    "speedTimeConstantS": 3,
+    "durationS": 60,
+    "baseRpmPerLMin": 120,
+    "assumedPeakAngleDeg": 42,
+    "angleWidthDeg": 35,
+    "anglePenalty": 0.45
+  },
+  "flowsLMin": [
+    1,
+    2.25,
+    3.5,
+    4.75,
+    6
+  ],
+  "serverCommandsDeg": [
+    10,
+    25,
+    40,
+    58,
+    75
+  ],
+  "simulatorCommandsDeg": [
+    70,
+    55,
+    40,
+    25,
+    10
+  ],
+  "legacyProportionalCommandsDeg": [
+    70,
+    57,
+    42,
+    27,
+    12
+  ],
+  "seeds": [
+    20260827,
+    20260828,
+    20260829,
+    20260830,
+    20260831
+  ],
+  "randomStream": "one generator per replicate; ascending flows; same 601 speed multipliers across four modes per flow",
+  "format": {
+    "files": 25,
+    "rowsPerConfiguration": 601,
+    "totalDataRows": 60100,
+    "header": "Timestamp_ms,Flow_LPM,Trial_Rep,System_Type,Blade_Angle_Deg,Measured_RPM,Generated_Voltage_V,Generated_Current_A,Generated_Wattage_W",
+    "rounding": {
+      "flow": 2,
+      "rpm": 1,
+      "voltage": 4,
+      "current": 4,
+      "scaledPower": 4
+    },
+    "timeConvention": "state updated before time 0 label; inclusive 0..600 loop"
+  },
+  "limitations": [
+    "uncalibrated synthetic model, not a hydraulic energy balance",
+    "42 degree peak assumed, not discovered",
+    "0.65 times VI is legacy scaled output, not terminal load power",
+    "speed perturbations do not reach flow/controller or next state",
+    "firmware has unverified linkage and no calibrated V/I/rpm logger",
+    "historical manuscript table provenance unresolved; never identify a replay as its source"
+  ],
+  "historicalFirmware": "retrieve from immutable commit; do not duplicate embedded network values in new documentation",
+  "replayRuntime": "bun 1.4.3"
+}
