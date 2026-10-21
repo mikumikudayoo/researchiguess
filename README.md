@@ -18,7 +18,7 @@ bun run legacy:simulate -- results/my-new-legacy-replay
 
 replay output is a new execution of historical synthetic code, not a physical experiment or proof of the manuscript table's source. existing output directories are rejected to protect earlier records. `Measured_RPM` and `Generated_Wattage_W` in legacy CSVs are historical column names: the former is modeled rpm; the latter includes an unexplained 0.65 scale after terminal VI.
 
-see [baseline inventory](docs/baseline.md) and [baseline manifest](data/baselines/a37d1d5.manifest.json). source hashes and all 25 output files have regression tests. no repository test establishes hardware calibration or scientific validation. legacy firmware contains historical network settings and unreviewed actuator/relay behavior: do not deploy it without configuration review and supervised bench validation.
+see [baseline inventory](docs/baseline.md) and [baseline manifest](data/baselines/a37d1d5.manifest.json). source hashes and all 25 output files have regression tests. no repository test establishes hardware calibration or scientific validation. the immutable historical firmware contains unreviewed actuator/relay behavior and old network settings; the current replacement is disabled by default.
 
 ## controller v1
 
@@ -42,3 +42,13 @@ CSV/JSON, deterministic SVG plots and a reproducibility manifest. See
 [dynamic assumptions and metric definitions](docs/dynamics.md). Timing and response
 metrics describe this discrete model; they do not certify real-time hardware or
 mechanical protection.
+
+## firmware reliability
+
+The root `sketch_aug3a.ino` now stops compilation and points to the separate ESP32
+sketch under `firmware/esp32/taph_reliability/`. Its default build initializes no
+actuator, relay, sensor or network. The optional operational path requires explicit
+private configuration review, fresh eligible commands and local arming; it never
+automatically starts the pump. See [firmware gates, host tests and remaining bench
+work](docs/firmware.md). `bun test` requires a C++17-capable `g++` for host mocks.
+Both firmware paths pass the pinned real ESP32 compile-only check (`bash scripts/compile-esp32.sh`); see [versions, nondeployable fixture, warnings and limits](docs/firmware.md#real-esp32-compile-only-verification). The actual physical board and configuration remain unverified, and physical validation remains outstanding.
