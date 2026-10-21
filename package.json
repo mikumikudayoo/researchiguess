@@ -16,8 +16,9 @@
   "scripts": {
     "test": "bun test",
     "typecheck": "bun node_modules/typescript/bin/tsc --noEmit",
-    "build": "bun build server.ts scripts/legacy-run.ts --target=bun --outdir=dist scripts/simulate.ts",
+    "build": "bun build server.ts scripts/legacy-run.ts scripts/simulate.ts scripts/simulate-dynamics.ts --target=bun --outdir=dist",
     "legacy:simulate": "bun scripts/legacy-run.ts",
-    "simulate": "bun scripts/simulate.ts"
+    "simulate": "bun scripts/simulate.ts",
+    "simulate:dynamics": "bun scripts/simulate-dynamics.ts"
   }
 }
