@@ -93,3 +93,97 @@ test('dynamic CLI preserves schema, source/output hashes, deterministic files an
   expect((await execute(first)).code).not.toBe(0);expect(JSON.parse(readFileSync(join(first,'manifest.json'),'utf8')).status).toBe('complete');
  }finally{rmSync(dir,{recursive:true,force:true});}
 });
+
+test('single-run validation excludes unused flow and pitch constraints',async()=>{
+ const {exampleModel}=await import('../src/model/plant');
+ const s={...scenario(),profile:{kind:'constant' as const,flowLMin:0}};
+ const fixed=runDynamic({scenario:s,controller:identityExample,controllerId:'fixed-assumed-peak-42',seed:1});
+ expect(fixed.rows.every(r=>r.trueFlowLMin===0&&r.requestedPitchDeg===42&&r.rpm===0&&r.pLoadW===0)).toBe(true);
+ expect(fixed.controller.outOfRange).toBe('reject');
+ const fuzzy=runDynamic({scenario:{...s,profile:{kind:'constant',flowLMin:3.5}},model:{...exampleModel,pitchMinDeg:10},controller:identityExample,controllerId:'fuzzy-increasing',seed:1});
+ expect(fuzzy.rows.every(r=>r.requestedPitchDeg===40&&r.actualModeledPitchDeg>=40&&r.actualModeledPitchDeg<=42)).toBe(true);
+ expect(fuzzy.model.pitchMinDeg).toBe(10);expect(fuzzy.controller.outOfRange).toBe('reject');
+});
+
+test('selected-controller validation retains range, initial-state, and selection checks',async()=>{
+ const {exampleModel}=await import('../src/model/plant');
+ const s={...scenario(),profile:{kind:'constant' as const,flowLMin:0}};
+ for(const controllerId of ['fuzzy-increasing','linear-increasing'] as const)
+  expect(()=>runDynamic({scenario:s,controller:identityExample,controllerId,seed:1})).toThrow('flow outside configured operating range');
+ const narrowModel={...exampleModel,pitchMinDeg:10};
+ const nominal={...s,profile:{kind:'constant' as const,flowLMin:3.5}};
+ expect(()=>runDynamic({scenario:nominal,model:narrowModel,controller:identityExample,controllerId:'fixed-5',seed:1})).toThrow('input outside illustrative model operating bounds');
+ expect(()=>runDynamic({scenario:{...nominal,initialPitchDeg:5},model:narrowModel,controller:identityExample,controllerId:'fuzzy-increasing',seed:1})).toThrow();
+ expect(()=>runDynamic({scenario:{...nominal,profile:{kind:'constant',flowLMin:7}},controllerId:'fixed-assumed-peak-42',seed:1})).toThrow();
+ expect(()=>runDynamic({scenario:{...nominal,profile:{kind:'constant',flowLMin:1},sensorNoiseHalfWidthLMin:.1},controller:identityExample,controllerId:'fuzzy-increasing',seed:1})).toThrow();
+ expect(()=>validateDynamics(s,exampleModel,identityExample)).toThrow(); // Omission still checks all four.
+ expect(()=>validateDynamics(s,exampleModel,identityExample,['fixed-assumed-peak-42','fuzzy-increasing'])).toThrow();
+ expect(()=>validateDynamics(nominal,narrowModel,identityExample,['fuzzy-increasing','fixed-5'])).toThrow();
+ for(const ids of [[],['unknown'],['fixed-5','fixed-5'],null])
+  expect(()=>validateDynamics(nominal,exampleModel,identityExample,ids as any)).toThrow('nonempty unique known controller IDs required');
+ expect(()=>runDynamic({scenario:nominal,controllerId:'unknown' as any,seed:1})).toThrow('known controller IDs');
+});
+
+test('CLI validates exactly selected comparators and preserves subset provenance',async()=>{
+ const {mkdtempSync,writeFileSync,readFileSync,rmSync,existsSync}=await import('node:fs');
+ const {tmpdir}=await import('node:os');const {join}=await import('node:path');const {createHash}=await import('node:crypto');
+ const {exampleModel}=await import('../src/model/plant');
+ const dir=mkdtempSync(join(tmpdir(),'taph-selected-dynamics-'));
+ try{
+  const cases=[
+   {ids:['fixed-assumed-peak-42'],flow:0,minPitch:5,valid:true},
+   {ids:['fuzzy-increasing'],flow:3.5,minPitch:10,valid:true},
+   {ids:['fuzzy-increasing','linear-increasing'],flow:3.5,minPitch:10,valid:true},
+   {ids:['fuzzy-increasing'],flow:0,minPitch:5,valid:false},
+   {ids:['fixed-5'],flow:3.5,minPitch:10,valid:false},
+   {ids:['fixed-assumed-peak-42','fuzzy-increasing'],flow:0,minPitch:5,valid:false},
+   {ids:['fuzzy-increasing','fixed-5'],flow:3.5,minPitch:10,valid:false},
+   {ids:[],flow:3.5,minPitch:5,valid:false},
+   {ids:['unknown'],flow:3.5,minPitch:5,valid:false},
+   {ids:['fixed-5','fixed-5'],flow:3.5,minPitch:5,valid:false},
+  ];
+  for(const [i,c] of cases.entries()){
+   const config={schemaVersion:'taph.dynamic-run-config.v1',id:'selected-regression',model:{...exampleModel,pitchMinDeg:c.minPitch},controller:identityExample,seeds:[123],controllerIds:c.ids,scenarios:[{...scenario(),profile:{kind:'constant',flowLMin:c.flow}}]};
+   const input=join(dir,`input-${i}.json`),out=join(dir,`output-${i}`);writeFileSync(input,JSON.stringify(config));
+   const p=Bun.spawn([process.execPath,'scripts/simulate-dynamics.ts',out,input],{stdout:'pipe',stderr:'pipe'});
+   const errors=await new Response(p.stderr).text(),code=await p.exited;
+   if(!c.valid){expect(code).not.toBe(0);expect(errors).toMatch(/RangeError|nonempty unique known controller IDs required/);expect(existsSync(out)).toBe(false);continue;}
+   expect({code,errors}).toEqual({code:0,errors:''});
+   const manifest=JSON.parse(readFileSync(join(out,'manifest.json'),'utf8'));
+   expect(manifest.status).toBe('complete');expect(manifest.controllerIds).toEqual(c.ids);expect(manifest.actualRuns).toBe(c.ids.length);expect(manifest.actualRows).toBe(101*c.ids.length);
+   expect(JSON.parse(readFileSync(join(out,'config.json'),'utf8'))).toEqual(config);
+   const summaries=JSON.parse(readFileSync(join(out,'comparison.json'),'utf8'));expect(summaries.map((x:any)=>x.controllerId)).toEqual(c.ids);
+   for(const [file,hash]of Object.entries(manifest.outputSha256))expect(createHash('sha256').update(readFileSync(join(out,file))).digest('hex')).toBe(String(hash));
+   for(const [file,hash]of Object.entries(manifest.sources))expect(createHash('sha256').update(readFileSync(file)).digest('hex')).toBe(String(hash));
+  }
+ }finally{rmSync(dir,{recursive:true,force:true});}
+});
+
+// Captured from PR #4 at 5ed8be355facf77049e7b3779458afb90f3bf15b, before the
+// selection fix. These are synthetic model outputs, not measured research data.
+test('built-in four-controller outputs retain their pre-fix hashes',async()=>{
+ const {mkdtempSync,readFileSync,rmSync}=await import('node:fs');
+ const {tmpdir}=await import('node:os');const {join}=await import('node:path');const {createHash}=await import('node:crypto');
+ const dir=mkdtempSync(join(tmpdir(),'taph-default-regression-'));
+ try{
+  const out=join(dir,'run'),p=Bun.spawn([process.execPath,'scripts/simulate-dynamics.ts',out],{stdout:'pipe',stderr:'pipe'});
+  const errors=await new Response(p.stderr).text();expect({code:await p.exited,errors}).toEqual({code:0,errors:''});
+  const manifest=JSON.parse(readFileSync(join(out,'manifest.json'),'utf8'));
+  expect(manifest.actualRows).toBe(19232);expect(manifest.actualRuns).toBe(32);expect(manifest.controllerIds).toEqual([...controllerIds]);
+  expect(manifest.configSha256).toBe("9a18b9b281770148fe835e6955f5a13d4e829806aa7447f2e4cd2950615ee7ca");
+  const expected={
+  "config.json": "16ac954049da16028d02d0b9ee3457097a87216d5570edfa5433886881318ed2",
+  "samples.csv": "7afa8d4d145ddcf835a23b2d1daaa778c0f92853c398ce4584206564fe89274b",
+  "comparison.json": "6ed31a04fc20c7a7de203134c031219b062b388eb544a897f41d83e75f775f80",
+  "comparison.csv": "e6fbf35b5832fe13d7010243e1e2b0f255c17b10b13160a3c81c90e2e581412f",
+  "deliveries.json": "3bdb8599b45f21dbc695be38d4ea28dbd3aaabae819aa9ef06331b9ce84114e2",
+  "timeseries-constant-sensor-noise-v1.svg": "509aebec9eaccb57987bb16fc2393202f3d5d8aa00469fd4e35a3e6cc01c6e80",
+  "timeseries-noise-free-step-v1.svg": "84f49f1ad69353397f79130a33cff9438db064ae2885960dc1ebe5c1a1ee0684",
+  "timeseries-ramp-sensor-noise-v1.svg": "2f07bf6e0686306c877611e8fa7722748189493ae128a3111fc955a1fcdb229e",
+  "timeseries-profile-sensor-noise-v1.svg": "6a21ad850c5a4e2b12192ae9e788941f0f26d9e8a113d5698de19dd092f144de",
+  "comparison-power-versus-speed.svg": "376b3530cc96018b5bf538fe966f7cf7f367fe302fe09253616ad0eb5b861956"
+};
+  expect(manifest.outputSha256).toEqual(expected);
+  for(const [file,hash]of Object.entries(expected))expect(createHash('sha256').update(readFileSync(join(out,file))).digest('hex')).toBe(hash);
+ }finally{rmSync(dir,{recursive:true,force:true});}
+});

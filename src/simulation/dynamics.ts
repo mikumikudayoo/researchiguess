@@ -45,8 +45,10 @@ export function flowAtGrid(p:FlowProfile,k:number,dt:number):number {
   }
   return p.knots.at(-1)!.flowLMin;
 }
-export function validateDynamics(value:unknown,m:ModelConfig=exampleModel,c:ControllerConfig=identityExample):asserts value is DynamicScenario {
+/** Validate only the selected comparators; omitted selection retains the full-suite check. */
+export function validateDynamics(value:unknown,m:ModelConfig=exampleModel,c:ControllerConfig=identityExample,selectedControllerIds:readonly ComparatorId[]=controllerIds):asserts value is DynamicScenario {
   validateModelConfig(m);validateConfig(c);
+  if(!Array.isArray(selectedControllerIds)||!selectedControllerIds.length||new Set(selectedControllerIds).size!==selectedControllerIds.length||selectedControllerIds.some(id=>!controllerIds.includes(id)))throw new Error('nonempty unique known controller IDs required');
   exactObject(value,['schemaVersion','id','profile','dtS','durationS','measurementStartS','initialRpm','initialPitchDeg','sensorPeriodS','communicationDelayS','sensorNoiseHalfWidthLMin','actuatorTimeConstantS','actuatorRateLimitDegPerS','responseBandFraction']);
   const s=value as unknown as DynamicScenario;
   if(s.schemaVersion!=='taph.dynamic-scenario.v1'||!validId(s.id))throw new Error('invalid dynamic scenario');
@@ -68,7 +70,7 @@ export function validateDynamics(value:unknown,m:ModelConfig=exampleModel,c:Cont
   }else throw new Error('unknown profile');
   for(const q of flows)assertOperatingPoint(q,s.initialPitchDeg,m);
   const low=Math.max(0,Math.min(...flows)-s.sensorNoiseHalfWidthLMin), high=Math.min(m.flowMaxLMin,Math.max(...flows)+s.sensorNoiseHalfWidthLMin);
-  for(const id of controllerIds)for(const q of [low,high])assertOperatingPoint(q,comparatorCommand(id,q,c).requestedPitchDeg,m);
+  for(const id of selectedControllerIds)for(const q of [low,high])assertOperatingPoint(q,comparatorCommand(id,q,c).requestedPitchDeg,m);
 }
 export interface DynamicRow extends SimulationRow {
   dynamicsSchemaVersion:'taph.dynamic-row.v1'; sensorSampleTimeS:number; sensorNoiseLMin:number;
@@ -79,7 +81,7 @@ export interface Delivery {issuedAtS:number;deliveredAtS:number;requestedPitchDe
 export interface DynamicRun {rows:DynamicRow[];deliveries:Delivery[];scenario:DynamicScenario;model:ModelConfig;controller:ControllerConfig;}
 export function runDynamic(o:{scenario?:DynamicScenario;model?:ModelConfig;controller?:ControllerConfig;controllerId:ComparatorId;seed:number;configId?:string}):DynamicRun {
   const s=o.scenario??exampleDynamics,m=o.model??exampleModel,c=o.controller??{...identityExample,outOfRange:'clamp'};
-  validateDynamics(s,m,c);validateSeed(o.seed);if(!controllerIds.includes(o.controllerId))throw new Error('unknown comparator');
+  validateDynamics(s,m,c,[o.controllerId]);validateSeed(o.seed);
   const configId=o.configId??'dynamic-example-v1';if(!validId(configId))throw new Error('invalid config id');
   const n=gridIndex(s.durationS,s.dtS),sampleEvery=gridIndex(s.sensorPeriodS,s.dtS),delay=gridIndex(s.communicationDelayS,s.dtS),rng=seededRng(o.seed);
   let rpm=s.initialRpm,pitch=s.initialPitchDeg,sensed=flowAt(s.profile,0),noise=0,sampledAt=0,issuedAt=0,deliveredAt:number|null=null;

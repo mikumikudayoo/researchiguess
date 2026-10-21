@@ -38,7 +38,7 @@ if(!Array.isArray(config.seeds) || !config.seeds.length || new Set(config.seeds)
 config.seeds.forEach(validateSeed);
 if(!Array.isArray(config.controllerIds) || !config.controllerIds.length || new Set(config.controllerIds).size!==config.controllerIds.length || config.controllerIds.some(id=>!controllerIds.includes(id))) throw new Error('nonempty unique known controller IDs required');
 if(!Array.isArray(config.scenarios) || !config.scenarios.length) throw new Error('at least one scenario required');
-for(const scenario of config.scenarios) validateDynamics(scenario,config.model,config.controller);
+for(const scenario of config.scenarios) validateDynamics(scenario,config.model,config.controller,config.controllerIds);
 if(new Set(config.scenarios.map(s=>s.id)).size!==config.scenarios.length) throw new Error('scenario IDs must be unique');
 const expectedRows=config.scenarios.reduce((n,s)=>n+gridIndex(s.durationS,s.dtS)+1,0)*config.seeds.length*config.controllerIds.length;
 if(!Number.isSafeInteger(expectedRows) || expectedRows>2_000_000) throw new Error('CLI output exceeds two million rows; split the declared scenarios');
