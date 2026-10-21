@@ -23,3 +23,12 @@ see [baseline inventory](docs/baseline.md) and [baseline manifest](data/baseline
 ## controller v1
 
 `bun server.ts` starts the new localhost-only versioned API using the explicitly unverified identity mapping. see [physical coordinates and protocol](docs/controller.md). the shared controller requests increasing physical pitch; reverse servo linkages are supported by an explicit transform. the numeric-only legacy HTTP route is retired to avoid accidental incompatible actuation. archived legacy files and replay outputs are unchanged.
+
+## corrected illustrative model
+
+`bun run simulate -- results/new-constant-run` writes a new, separately versioned
+synthetic result set and complete reproducibility manifest. Load power now obeys
+`PL = VI = I²RL`; the first row is the actual initial state at t=0. The default
+measurement window excludes the first 30 seconds. See [model assumptions and output
+schema](docs/model.md). These changes do not validate the assumed turbine law,
+the built-in 42° peak, generator constants, or historical manuscript provenance.
