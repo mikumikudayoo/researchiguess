@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# forensic source archives retain their exact audited bytes, including CRLF
+legacy/a37d1d5/* -text
