@@ -1,54 +1,155 @@
-# taph research software
+# TAPH research software
 
-TAPH investigates flow-dependent blade-pitch control for hydropower generators. this repository contains historical ESP32 firmware, a fixed fuzzy rule server and an **uncalibrated synthetic simulator**. it is not evidence of validated protection, efficiency or durability.
+TAPH investigates flow-dependent blade-pitch control for hydropower generators.
+The revised software implements a fixed fuzzy schedule, an HTTP controller,
+**uncalibrated synthetic simulations**, a disabled-by-default ESP32 adapter and a
+reproducible historical data analysis. It does not establish physical protection,
+hydraulic efficiency, optimized pitch, longer component life or prototype readiness.
 
-the researchers' future design requirement is **increasing intended physical blade pitch with increasing volumetric flow**. servo command direction and the mechanical linkage remain unverified. the historical server and simulator disagree; both are preserved for reproducibility.
+The researchers' design requirement is **increasing intended physical blade pitch
+with increasing volumetric flow**. Servo rotation, actual blade pitch and angle of
+attack are different quantities. The configurable affine linkage remains physically
+unverified; a reversed linkage can require decreasing servo commands for increasing
+pitch. The example identity transform is not a calibration.
 
-## baseline commands
+## Install and verify
 
-use the Bun version pinned in `package.json`:
+Use the Bun version pinned in `package.json` (1.4.3), Git, and a C++17-capable `g++`
+for host-only firmware tests. TypeScript is pinned to 5.9.3. GitHub Actions runs the
+same software checks on Ubuntu.
 
 ```sh
 bun install --frozen-lockfile
 bun test
 bun run typecheck
 bun run build
-bun run legacy:simulate -- results/my-new-legacy-replay
 ```
 
-replay output is a new execution of historical synthetic code, not a physical experiment or proof of the manuscript table's source. existing output directories are rejected to protect earlier records. `Measured_RPM` and `Generated_Wattage_W` in legacy CSVs are historical column names: the former is modeled rpm; the latter includes an unexplained 0.65 scale after terminal VI.
+Build is a bundling check. Use the source-based commands below from the repository
+root to run research workflows; generated bundles are not standalone deployment
+packages with embedded source/data manifests. No test flashes firmware, opens a
+serial device or energizes equipment. Passing tests verifies the stated software
+specification, not physical calibration or scientific validation.
 
-see [baseline inventory](docs/baseline.md) and [baseline manifest](data/baselines/a37d1d5.manifest.json). source hashes and all 25 output files have regression tests. no repository test establishes hardware calibration or scientific validation. the immutable historical firmware contains unreviewed actuator/relay behavior and old network settings; the current replacement is disabled by default.
+## Choose an explicit evidence pathway
 
-## controller v1
+Every output directory must be new. Generated files are excluded from Git by
+`results/`; retain completed run directories and their manifests together.
 
-`bun server.ts` starts the new localhost-only versioned API using the explicitly unverified identity mapping. see [physical coordinates and protocol](docs/controller.md). the shared controller requests increasing physical pitch; reverse servo linkages are supported by an explicit transform. the numeric-only legacy HTTP route is retired to avoid accidental incompatible actuation. archived legacy files and replay outputs are unchanged.
+```sh
+# Historical software replay, preserving original arithmetic and timing defects:
+bun run legacy:simulate -- results/my-legacy-replay
 
-## corrected illustrative model
+# New corrected constant-flow illustration:
+bun run simulate -- results/my-corrected-constant-run
 
-`bun run simulate -- results/new-constant-run` writes a new, separately versioned
-synthetic result set and complete reproducibility manifest. Load power now obeys
-`PL = VI = I²RL`; the first row is the actual initial state at t=0. The default
-measurement window excludes the first 30 seconds. See [model assumptions and output
-schema](docs/model.md). These changes do not validate the assumed turbine law,
-the built-in 42° peak, generator constants, or historical manuscript provenance.
+# New dynamic-flow comparisons and plots:
+bun run simulate:dynamics -- results/my-dynamic-run
 
-## dynamic synthetic comparisons
+# Reanalysis of the unchanged historical manuscript table:
+bun run analyze:historical --input /path/to/power-table.csv \
+  --source-manifest /path/to/source-manifest.json --out results/my-historical-reanalysis
+```
 
-`bun run simulate:dynamics -- results/new-dynamic-run` compares four controllers
-on constant, step, ramp and bounded profile flow. True flow, noisy sampled flow,
-communication delay and modeled actuator motion are separate. Outputs include
-CSV/JSON, deterministic SVG plots and a reproducibility manifest. See
-[dynamic assumptions and metric definitions](docs/dynamics.md). Timing and response
-metrics describe this discrete model; they do not certify real-time hardware or
-mechanical protection.
+The constant and dynamic commands accept an optional second positional argument
+containing a complete JSON configuration. Their generated `config.json` can serve
+as an explicit starting point for a new run. Configurations, source and output
+hashes, runtime and software revision are recorded. Do not analyze an incomplete
+manifest or treat a dirty source tree as identified solely by its commit hash.
 
-## firmware reliability
+| Evidence category | Meaning |
+|---|---|
+| `historical-reported-unverified` | Locally supplied reported power values; physical versus simulation origin remains unresolved |
+| `historical-simulator-replay` | New execution of the byte-preserved audited synthetic code; not proof of the historical table's source |
+| `corrected-synthetic-simulation` | Newly generated outputs from explicit assumed model/scenario/controller configurations |
+| `physical-measurement` | Reserved for future documented acquisitions with raw records, instruments and calibration; none supplied here |
 
-The root `sketch_aug3a.ino` now stops compilation and points to the separate ESP32
-sketch under `firmware/esp32/taph_reliability/`. Its default build initializes no
-actuator, relay, sensor or network. The optional operational path requires explicit
-private configuration review, fresh eligible commands and local arming; it never
-automatically starts the pump. See [firmware gates, host tests and remaining bench
-work](docs/firmware.md). `bun test` requires a C++17-capable `g++` for host mocks.
-Both firmware paths pass the pinned real ESP32 compile-only check (`bash scripts/compile-esp32.sh`); see [versions, nondeployable fixture, warnings and limits](docs/firmware.md#real-esp32-compile-only-verification). The actual physical board and configuration remain unverified, and physical validation remains outstanding.
+Firmware status/acquisition telemetry is labeled unverified bench telemetry and
+must not be promoted to a validated physical experiment without a separate run and
+calibration record. See [data provenance and analysis](docs/reproducibility.md).
+
+## Historical preservation and entry points
+
+The inspected default branch matched audited commit
+`a37d1d5abf4d13d775ae206b4cd1c4c59f0e88ce` exactly before these six development
+milestones. No intervening historical change was found. All original files remain
+in that immutable commit. Byte-identical server/simulator archives, baseline
+constants, rule schedules, RNG behavior and all 25 replay CSV fingerprints are
+preserved and tested. See [baseline inventory](docs/baseline.md).
+
+The historical server commands 10°,25°,40°,58°,75° at the five nominal flows;
+the historical simulator uses 70°,55°,40°,25°,10°. Those records are not changed.
+`simulator.ts` now refuses ambiguous direct execution and points to the explicit
+commands above. It does not silently substitute a new schedule into an old run.
+Legacy CSV `Measured_RPM` is synthetic speed; historical `Generated_Wattage_W`
+includes the unexplained additional 0.65 factor after terminal VI.
+
+`bun server.ts` starts the new versioned controller API on localhost with the
+unverified identity mapping and hardware eligibility false. The retired numeric-only
+route returns 410. Server and new simulations call the same fixed zero-order
+Sugeno-style schedule; they do not learn, adapt parameters or discover an optimum.
+See [physical coordinates, memberships, rules and protocol](docs/controller.md).
+
+## What the new simulations establish
+
+The corrected electrical boundary uses `PL = VI = I²RL = V²/RL`, with internal
+copper loss separate. The initial row is the initial state at t=0, followed by
+exact first-order transitions for held targets and explicit measurement windows.
+The assumed 42° speed peak is built into the default plant law, not experimentally
+discovered. No hydraulic head, torque or closed mechanical energy balance is modeled.
+See [constant model assumptions and schema](docs/model.md).
+
+Dynamic scenarios prescribe constant, step, ramp and bounded profile flow. True
+flow reaches the plant; separately noisy sampled flow reaches the controller.
+Communication delay, actuator time constant and rate limit are uncalibrated
+settings. Fixed5, fixed42, increasing fuzzy and increasing linear comparisons
+share inputs, initial conditions and windows. Requested, delivered and actual
+modeled pitch remain separate. See [dynamic assumptions and metric definitions](docs/dynamics.md).
+
+Outputs include unit-labeled CSV/JSON and reproducible SVGs. Speed, power, energy,
+variability and finite-record settling describe the model. Seeds and correlated
+time points are not independent physical observations. The model cannot establish
+wear, lifespan, overspeed protection, real-time hardware performance or efficiency.
+
+## Historical table reanalysis
+
+The public repository intentionally does not bundle manuscript data, private source
+links or their acquisition records. Supply the exact CSV and source manifest locally
+as described in [the input schema](docs/reproducibility.md). The tool preserves all
+listed values, records byte hashes and produces descriptive tables, SD denominators,
+plots and a conditional paired calculation on five flow means. It does not infer
+physical provenance, independent sampling or preserved output from a nonsignificant
+result. The 25 listed values per condition are described separately; column positions
+are not verified trial IDs. Automated tests use explicitly artificial fixtures,
+never invented research observations.
+
+## Firmware boundary
+
+The root `sketch_aug3a.ino` stops compilation and points to the separate target
+`firmware/esp32/taph_reliability/`. Default configuration initializes serial status
+only: no GPIO, sensor, network, servo or relay. The optional operational path needs
+private reviewed configuration, calibration records, fresh eligible commands,
+explicit local arming and a separate pump command. It never automatically starts
+the pump. No zero-angle or hold-last behavior is declared safe.
+
+Portable C++ tests and fake adapter interfaces verify software timing, message
+validation, stale data, latching and actuator/pump sequencing. Both firmware paths
+also compile with the pinned real ESP32 toolchain, using an illustrative target
+and a non-production fixture. This establishes build compatibility only; the
+as-built board, wiring, PWM startup, measured linkage, sensor calibration and
+supervised bench validation remain unverified. See the versions, target and limits in
+[firmware gates and remaining work](docs/firmware.md). The unrelated `badapple.ino`
+demo remains unchanged and is not part of the TAPH sketch or validation.
+
+## Review status and next work
+
+Six stacked PRs propose these changes; they were not merged automatically. Review
+the PR chain in order. The complete software/documentation/model versus physical
+validation classification is in [engineering traceability](docs/engineering-traceability.md).
+
+Before physical deployment, resolve the historical data source, as-built board and
+wiring, measured command-to-pitch transform, sensor calibration, physically justified
+fault action, external interlock and compile compatibility with the confirmed
+as-built board. Then perform a supervised,
+recorded bench protocol and a fair fixed-pitch sweep with a predefined speed/power
+objective. Narrow claims to the evidence available while those steps remain open.

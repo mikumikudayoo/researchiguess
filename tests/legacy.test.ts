@@ -39,3 +39,12 @@ test('full legacy replay matches all 25 CSV byte hashes and known mislabeled ini
     expect(rows).toBe(60100);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
+test('retired root simulator requires an explicit evidence pathway without producing files',()=>{
+  const dir=mkdtempSync(join(tmpdir(),'taph-migration-'));
+  try{
+    const run=Bun.spawnSync([process.execPath,resolve('simulator.ts')],{cwd:dir});
+    expect(run.exitCode).not.toBe(0);
+    const message=run.stderr.toString();expect(message).toContain('legacy:simulate');expect(message).toContain('simulate:dynamics');
+    expect(readdirSync(dir)).toHaveLength(0);
+  }finally{rmSync(dir,{recursive:true,force:true});}
+});
