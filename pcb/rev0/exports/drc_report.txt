@@ -1,0 +1,182 @@
+** Drc report for taph_carrier_rev0.kicad_pcb **
+** Created on 2026-11-07T22:14:46 **
+** Report includes: Errors, Warnings, Exclusions **
+
+** Found 6 DRC violations **
+[starved_thermal]: Thermal relief connection to zone incomplete (layer B.Cu; zone min spoke count 2; actual 1)
+    Local override; error
+    @(50.0000 mm, 50.0000 mm): Zone [GND] on B.Cu, priority 0
+    @(137.4000 mm, 73.2400 mm): PTH pad 7 [GND] of J15
+[starved_thermal]: Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)
+    Local override; error
+    @(50.0000 mm, 50.0000 mm): Zone [GND] on F.Cu, priority 0
+    @(173.0000 mm, 98.5000 mm): PTH pad 2 [GND] of J8
+[starved_thermal]: Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)
+    Local override; error
+    @(50.0000 mm, 50.0000 mm): Zone [GND] on F.Cu, priority 0
+    @(120.9500 mm, 138.5000 mm): Pad 2 [GND] of C18 on F.Cu
+[starved_thermal]: Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)
+    Local override; error
+    @(50.0000 mm, 50.0000 mm): Zone [GND] on F.Cu, priority 0
+    @(137.4000 mm, 73.2400 mm): PTH pad 7 [GND] of J15
+[silk_overlap]: Silkscreen clearance
+    Rule: board setup constraints silk; warning
+    @(98.3500 mm, 87.0000 mm): Reference field of R11
+    @(98.3800 mm, 85.2700 mm): Segment of J5 on F.Silkscreen
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(98.3500 mm, 87.0000 mm): Reference field of R11
+    @(97.0000 mm, 86.5400 mm): PTH pad 2 [SERVO_V+] of J5
+
+** Found 35 unconnected pads **
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(73.0625 mm, 136.9500 mm): Pad 2 [/Pump switch/PUMP_SRC] of Q1 on F.Cu
+    @(71.0375 mm, 143.0000 mm): Pad 1 [/Pump switch/PUMP_SRC] of R5 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(78.5000 mm, 130.0875 mm): Pad 2 [/Pump switch/PUMP_SRC] of R4 on F.Cu
+    @(73.0625 mm, 136.9500 mm): Pad 2 [/Pump switch/PUMP_SRC] of Q1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(82.8625 mm, 139.9500 mm): Pad 3 [/Pump switch/PUMP_SRC] of U3 on F.Cu
+    @(73.0625 mm, 136.9500 mm): Pad 2 [/Pump switch/PUMP_SRC] of Q1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(57.0000 mm, 112.9200 mm): PTH pad 2 [PGND] of J2
+    @(67.8500 mm, 120.0000 mm): Pad 1 [PGND] of D4 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(67.8500 mm, 120.0000 mm): Pad 1 [PGND] of D4 on F.Cu
+    @(88.2500 mm, 112.0000 mm): Pad 2 [PGND] of C7 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(76.9625 mm, 143.0000 mm): Pad 2 [PGND] of R5 on F.Cu
+    @(67.8500 mm, 120.0000 mm): Pad 1 [PGND] of D4 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(79.0000 mm, 146.5000 mm): Pad 1 [PGND] of NT1 on F.Cu
+    @(76.9625 mm, 143.0000 mm): Pad 2 [PGND] of R5 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(79.0000 mm, 146.5000 mm): Pad 1 [PGND] of NT1 on F.Cu
+    @(86.5000 mm, 145.5000 mm): PTH pad 1 [PGND] of TP7
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(85.1375 mm, 139.9500 mm): Pad 4 [PGND] of U3 on F.Cu
+    @(86.5000 mm, 145.5000 mm): PTH pad 1 [PGND] of TP7
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(57.0000 mm, 138.0000 mm): PTH pad 1 [+12V_PUMP] of J3
+    @(67.0000 mm, 136.0000 mm): Pad 1 [+12V_PUMP] of D5 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(64.0000 mm, 126.9125 mm): Pad 1 [+12V_PUMP] of R2 on F.Cu
+    @(67.0000 mm, 136.0000 mm): Pad 1 [+12V_PUMP] of D5 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(72.1500 mm, 120.0000 mm): Pad 2 [+12V_PUMP] of D4 on F.Cu
+    @(78.0000 mm, 120.5000 mm): PTH pad 1 [+12V_PUMP] of TP6
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(72.1500 mm, 120.0000 mm): Pad 2 [+12V_PUMP] of D4 on F.Cu
+    @(64.0000 mm, 126.9125 mm): Pad 1 [+12V_PUMP] of R2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(75.9200 mm, 110.5000 mm): PTH pad 2 [+12V_PUMP] of F2
+    @(75.9200 mm, 113.9000 mm): PTH pad 2 [+12V_PUMP] of F2
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(75.9200 mm, 110.5000 mm): PTH pad 2 [+12V_PUMP] of F2
+    @(81.7500 mm, 112.0000 mm): Pad 1 [+12V_PUMP] of C7 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(78.0000 mm, 120.5000 mm): PTH pad 1 [+12V_PUMP] of TP6
+    @(75.9200 mm, 113.9000 mm): PTH pad 2 [+12V_PUMP] of F2
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(81.7500 mm, 112.0000 mm): Pad 1 [+12V_PUMP] of C7 on F.Cu
+    @(95.0000 mm, 110.9125 mm): Pad 1 [+12V_PUMP] of R7 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(75.9200 mm, 84.5000 mm): PTH pad 2 [SERVO_V+] of F3
+    @(75.9200 mm, 87.9000 mm): PTH pad 2 [SERVO_V+] of F3
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(75.9200 mm, 87.9000 mm): PTH pad 2 [SERVO_V+] of F3
+    @(79.0000 mm, 94.0000 mm): PTH pad 1 [SERVO_V+] of TP11
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(75.9200 mm, 87.9000 mm): PTH pad 2 [SERVO_V+] of F3
+    @(82.7500 mm, 87.0000 mm): Pad 1 [SERVO_V+] of C11 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(79.0000 mm, 94.0000 mm): PTH pad 1 [SERVO_V+] of TP11
+    @(88.1500 mm, 95.0000 mm): Pad 2 [SERVO_V+] of D7 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(88.1500 mm, 95.0000 mm): Pad 2 [SERVO_V+] of D7 on F.Cu
+    @(97.0000 mm, 86.5400 mm): PTH pad 2 [SERVO_V+] of J5
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(57.0000 mm, 86.9200 mm): PTH pad 2 [SERVO_GND] of J4
+    @(79.0000 mm, 98.0000 mm): PTH pad 1 [SERVO_GND] of TP12
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(83.8500 mm, 95.0000 mm): Pad 1 [SERVO_GND] of D7 on F.Cu
+    @(79.0000 mm, 98.0000 mm): PTH pad 1 [SERVO_GND] of TP12
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(89.2500 mm, 87.0000 mm): Pad 2 [SERVO_GND] of C11 on F.Cu
+    @(83.8500 mm, 95.0000 mm): Pad 1 [SERVO_GND] of D7 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(89.5000 mm, 100.5000 mm): Pad 1 [SERVO_GND] of NT2 on F.Cu
+    @(83.8500 mm, 95.0000 mm): Pad 1 [SERVO_GND] of D7 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(97.0000 mm, 89.0800 mm): PTH pad 3 [SERVO_GND] of J5
+    @(89.2500 mm, 87.0000 mm): Pad 2 [SERVO_GND] of C11 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(60.5000 mm, 125.5000 mm): PTH pad 1 [PUMP_SW] of TP20
+    @(57.0000 mm, 132.9200 mm): PTH pad 2 [PUMP_SW] of J3
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(67.0000 mm, 132.0000 mm): Pad 2 [PUMP_SW] of D5 on F.Cu
+    @(67.5000 mm, 128.4375 mm): Pad 1 [PUMP_SW] of LED2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(67.0000 mm, 132.0000 mm): Pad 2 [PUMP_SW] of D5 on F.Cu
+    @(74.9375 mm, 136.0000 mm): Pad 3 [PUMP_SW] of Q1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(67.5000 mm, 128.4375 mm): Pad 1 [PUMP_SW] of LED2 on F.Cu
+    @(60.5000 mm, 125.5000 mm): PTH pad 1 [PUMP_SW] of TP20
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(57.0000 mm, 92.0000 mm): PTH pad 1 [/Servo interface/SERVO_VIN_RAW] of J4
+    @(66.0000 mm, 87.9000 mm): PTH pad 1 [/Servo interface/SERVO_VIN_RAW] of F3
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(66.0000 mm, 87.9000 mm): PTH pad 1 [/Servo interface/SERVO_VIN_RAW] of F3
+    @(66.0000 mm, 84.5000 mm): PTH pad 1 [/Servo interface/SERVO_VIN_RAW] of F3
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(57.0000 mm, 118.0000 mm): PTH pad 1 [/Pump switch/PUMP_VIN_RAW] of J2
+    @(66.0000 mm, 113.9000 mm): PTH pad 1 [/Pump switch/PUMP_VIN_RAW] of F2
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(66.0000 mm, 113.9000 mm): PTH pad 1 [/Pump switch/PUMP_VIN_RAW] of F2
+    @(66.0000 mm, 110.5000 mm): PTH pad 1 [/Pump switch/PUMP_VIN_RAW] of F2
+
+** Found 0 Footprint errors **
+
+** Ignored checks **
+    - Footprint has no courtyard defined
+    - Track endpoint not centered on via
+    - Tuning profile track geometries
+    - Footprint doesn't match symbol's footprint filters
+    - Footprint component type doesn't match footprint pads
+
+** End of Report **

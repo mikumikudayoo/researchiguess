@@ -1,0 +1,26 @@
+ERC report (2026-11-07T22:14:38, Encoding UTF8)
+Report includes: Errors, Warnings, Exclusions
+
+***** Sheet /
+
+***** Sheet /Logic power/
+
+***** Sheet /ESP32 DevKitC socket/
+
+***** Sheet /Pump switch/
+
+***** Sheet /Servo interface/
+
+***** Sheet /Sensor inputs/
+
+***** Sheet /Generator measurement/
+
+***** Sheet /HMI, expansion, test/
+
+ ** ERC messages: 0  Errors 0  Warnings 0
+
+ ** Ignored checks:
+    - Global label only appears once in the schematic
+    - Four connection points are joined together
+    - SPICE model issue
+    - Assigned footprint doesn't match footprint filters

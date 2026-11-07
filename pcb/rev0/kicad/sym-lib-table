@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "TAPH_Rev0")(type "KiCad")(uri "${KIPRJMOD}/libs/TAPH_Rev0.kicad_sym")(options "")(descr "TAPH rev0 project-local symbols (DevKitC header sockets)"))
+)
