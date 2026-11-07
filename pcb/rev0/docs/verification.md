@@ -24,11 +24,16 @@ No severity was changed and nothing was excluded to obtain this result.
 and `GND`. These nets are genuinely powered from connectors or through diodes, so the flags are driver
 annotations, not error suppression.
 
-### Independent netlist cross-check
+### Netlist consistency check (against `design.py`)
 
-`tools/check_netlist.py` compares KiCad's **exported** netlist with the design intent in `tools/design.py`
-pin by pin. Result: **252 pins / 47 nets match; 0 mismatches.** This catches labels that look connected
-but are not, which ERC alone would miss.
+`tools/check_netlist.py` compares KiCad's **exported** netlist with the connections declared in
+`tools/design.py`, pin by pin. Result: **252 pins / 47 nets match; 0 mismatches.**
+
+Scope: this confirms that the drawn schematic is *consistent* with `design.py`. It detects drawing and
+generation errors, such as labels that look attached but are not. It is **not** an independent check of
+electrical correctness: `design.py` and the schematic express the same design intent, so a wrong design
+decision passes. Electrical correctness depends on human review, datasheet checks and bench validation
+(review finding R1-7).
 
 ## 2. PCB: DRC (`kicad-cli pcb drc --severity-all --schematic-parity`)
 
@@ -54,6 +59,18 @@ centered on via", "tuning profile geometries", "footprint filters", "footprint c
 * The pump and servo power nets were **deliberately not routed** (see §4).
 * The routing is machine-generated and not hand-optimised: it has long diagonals under the DevKitC
   module and is not reviewed for EMI, return paths or analog layout quality.
+
+**Overall: the board is not DRC-clean.** 41 findings remain open: 35 unconnected, 4 starved-thermal errors
+and 2 silkscreen warnings. They are preserved unexcluded (review finding R1-6).
+
+## 2a. Open design-review findings
+
+Independent review R1 of PR #8 raised seven findings. They are recorded with technical responses in
+`docs/review_log.md`, and five of them (R1-1 to R1-5) require design changes that have **not** been
+applied yet:
+pump/servo reverse polarity (C7/C11 reverse-biased; fuse-cleared fault through Q1/D5/R5), shared-ground
+return paths, U4 back-feed into an unpowered servo, the generator sense ground bond, and ADC full-scale
+margins.
 
 ## 3. Board rules used (provisional)
 

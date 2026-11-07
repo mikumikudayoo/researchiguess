@@ -109,7 +109,7 @@ complete channel.
 | Channel | Front end | Values |
 |---|---|---|
 | Generator voltage (IO36) | R17/R18 divider → 1 k → 100 nF → clamp | Divider **TBD**: choose so that V<sub>max,gen</sub>·R18/(R17+R18) ≤ ~2.4 V and check the resistor voltage rating |
-| Generator current (IO39) | Off-board sensor on J10 → 10 k/10 k (×0.5) → 100 nF → clamp | Valid only for a sensor output ≤ 5 V; the sensor is **TBD** |
+| Generator current (IO39) | Off-board sensor on J10 → 10 k/10 k (×0.5) → 100 nF → clamp | **TBD.** ×0.5 is a placeholder: the sensor's maximum output × ratio must stay ≤ ~2.2–2.45 V, which a rail-to-rail 5 V output would exceed (review R1-5). The sensor is **TBD** |
 | Pump current (IO34) | R5 shunt → INA180 → 1 k/100 nF | Shunt and gain variant **TBD** |
 | Pump supply voltage (IO32) | 56 k/10 k (12 V → 1.82 V) → 1 k → 100 nF → clamp | Full scale ~16 V (within the 2.45 V region) |
 | Flow / RPM pulses (IO19 / IO27) | 10 k pull-up to 3.3 V, 1 k series, 1 nF, clamp; sensor supply chosen by solder jumper (ships **open**) | Sensor output type and supply unverified |

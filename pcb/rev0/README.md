@@ -41,6 +41,7 @@ No mains voltage is routed on the PCB, and generator power does not pass through
 | `docs/bom_review.md` / `.csv` | **Component list**, each part's status: implemented, provisional, TBD, optional, DNP or confirm |
 | `docs/verification.md` | **ERC/DRC results**, blockers and assumptions that need physical confirmation |
 | `docs/questions_for_review.md` | **Questions for the adviser and consultant** |
+| `docs/review_log.md` | Review findings received (R1: independent review of PR #8) with technical responses and proposed, not yet applied, actions |
 | `tools/` | Generators (`design.py` is the single source of design intent) and the build/export scripts |
 
 ## Designed versus conceptual
@@ -49,7 +50,8 @@ No mains voltage is routed on the PCB, and generator power does not pass through
 |---|---|
 | Schematic topology of every block | **Designed.** Electrically coherent; ERC 0 errors / 0 warnings; exported netlist verified pin-by-pin against intent |
 | Logic power chain, ESP32 sockets, pump gate drive and default-off, servo buffer, pulse-input and ADC conditioning, I2C/OLED, test points | **Designed** with chosen values; candidate parts still need datasheet confirmation |
-| Logic/signal/analog routing | **Preliminary.** Auto-routed by a simple project router, DRC-clean apart from the items listed in `docs/verification.md`, not hand-optimised |
+| Logic/signal/analog routing | **Preliminary.** All 38 non-blocked nets auto-routed by a simple project router; not hand-optimised |
+| Board DRC | **Not clean.** 35 unconnected items (blocked pump/servo nets), 4 starved-thermal errors and 2 silkscreen warnings remain open (`docs/verification.md`) |
 | Pump power path, servo power path | **Placed, routing BLOCKED.** Widths, fuses, MOSFET and shunt depend on unmeasured currents |
 | Generator voltage divider, shunt value, INA180 gain, fuse ratings, servo bulk capacitor, TVS on servo/generator inputs | **TBD** (placeholder values); blocked on external specifications |
 | RPM and pitch-feedback inputs, I2C expansion, spare GPIO | **Optional** interfaces; sensors not chosen |
