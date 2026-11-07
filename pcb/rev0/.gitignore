@@ -1,0 +1,9 @@
+# scratch build output (logs, previews); review exports live in exports/
+build/
+# KiCad local state
+*.kicad_prl
+*-backups/
+fp-info-cache
+*.lck
+~*.lck
+__pycache__/
